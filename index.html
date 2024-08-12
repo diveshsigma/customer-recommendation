@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Search and Recommendation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        button {
+            margin: 10px 0;
+            padding: 10px 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 200px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Search and Recommendation</h1>
+    
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Search for an item...">
+        <button onclick="search()">Search</button>
+        <button onclick="recommend()">Get Recommendations</button>
+    </div>
+
+    <h2>Results:</h2>
+    <div id="results"></div>
+
+    <script>
+        function search() {
+            const query = document.getElementById('search-input').value;
+            const url = `/search?query=${query}`;
+
+            fetch(url, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    let html = '<table><thead><tr><th>Name</th><th>Category</th><th>Price (₹)</th></tr></thead><tbody>';
+                    data.forEach(item => {
+                        html += `<tr><td>${item.name}</td><td>${item.category}</td><td>₹${item.price}</td></tr>`;
+                    });
+                    html += '</tbody></table>';
+                    document.getElementById('results').innerHTML = html;
+                });
+        }
+
+        function recommend() {
+            const query = document.getElementById('search-input').value;
+            const url = `/recommend?item_name=${query}`;
+
+            fetch(url, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    let html = '<table><thead><tr><th>Name</th><th>Category</th><th>Price (₹)</th></tr></thead><tbody>';
+                    data.forEach(item => {
+                        html += `<tr><td>${item.name}</td><td>${item.category}</td><td>₹${item.price}</td></tr>`;
+                    });
+                    html += '</tbody></table>';
+                    document.getElementById('results').innerHTML = html;
+                });
+        }
+    </script>
+</body>
+</html>
